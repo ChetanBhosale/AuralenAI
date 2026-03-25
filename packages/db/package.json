@@ -2,8 +2,8 @@
   "name": "@repo/db",
   "module": "index.ts",
   "type": "module",
-  "exports" : {
-    "*" : "./index.ts"
+  "exports": {
+    ".": "./index.ts"
   },
   "private": true,
   "devDependencies": {
@@ -14,8 +14,9 @@
     "typescript": "^5"
   },
   "dependencies": {
+    "@prisma/adapter-pg": "^7.5.0",
     "@prisma/client": "^7.5.0",
     "@prisma/extension-accelerate": "^3.0.1",
-    "@repo/secrets" : "*"
+    "@repo/secrets": "*"
   }
 }

@@ -1,15 +1,31 @@
 import dotenv from 'dotenv'
-dotenv.config({
-    path : '../../.env'
-})
 
-const exportData = {
-    BACKEND_PORT : process.env.BACKEND_PORT,
-    BACKEND_URL : process.env.NODE_ENV === 'development' ? process.env.DEV_BACKEND_URL : process.env.PROD_BACKEND_URL,
-    NODE_ENV : process.env.NODE_ENV,
-    DATABASE_URL : process.env.DATABASE_URL,
-    GOOGLE_CLIENT_ID : process.env.GOOGLE_CLIENT_ID,
-    GOOGLE_CLIENT_SECRET : process.env.GOOGLE_CLIENT_SECRET
+dotenv.config({ path: '../../.env' })
+
+const env = {
+    BACKEND_PORT: process.env.BACKEND_PORT,
+    NODE_ENV: process.env.NODE_ENV ?? 'development',
+    FRONTEND_URL: process.env.FRONTEND_URL,
+    NEXT_PUBLIC_BACKEND_URL: process.env.NEXT_PUBLIC_BACKEND_URL,
+
+    GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
+    GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
+    GOOGLE_REDIRECT_URI: process.env.GOOGLE_REDIRECT_URI,
+
+    JWT_SECRET: process.env.JWT_SECRET,
+
+    DATABASE_URL: process.env.DATABASE_URL,
+} as const
+
+/**
+ * Validates that all required env vars are present.
+ * Call this at server startup to fail fast.
+ */
+export function validateEnv(requiredKeys: (keyof typeof env)[]) {
+    const missing = requiredKeys.filter((key) => !env[key])
+    if (missing.length > 0) {
+        throw new Error(`Missing required environment variables: ${missing.join(', ')}`)
+    }
 }
 
-export default exportData;
+export default env

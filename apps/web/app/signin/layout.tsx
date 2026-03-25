@@ -1,7 +1,5 @@
-import { ReactNode } from "react";
+import { ReactNode, Suspense } from "react"
 
-const SignupLayout = ({children}:{children : ReactNode}) => {
-    return children
+export default function SigninLayout({ children }: { children: ReactNode }) {
+    return <Suspense>{children}</Suspense>
 }
-
-export default SignupLayout
