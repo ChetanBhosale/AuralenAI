@@ -2,6 +2,8 @@ import { Geist_Mono, Inter, Manrope } from "next/font/google"
 
 import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
+import { QueryProvider } from "@/context/query-provider"
+import { RootContextProvider } from "@/context/root-context"
 import { cn } from "@/lib/utils";
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
@@ -29,7 +31,11 @@ export default function RootLayout({
       className={cn("antialiased", fontMono.variable, inter.variable, manrope.variable)}
     >
       <body>
-        <ThemeProvider>{children}</ThemeProvider>
+        <ThemeProvider>
+          <QueryProvider>
+            <RootContextProvider>{children}</RootContextProvider>
+          </QueryProvider>
+        </ThemeProvider>
       </body>
     </html>
   )

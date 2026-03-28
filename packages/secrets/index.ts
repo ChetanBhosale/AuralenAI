@@ -7,14 +7,13 @@ const env = {
     NODE_ENV: process.env.NODE_ENV ?? 'development',
     FRONTEND_URL: process.env.FRONTEND_URL,
     NEXT_PUBLIC_BACKEND_URL: process.env.NEXT_PUBLIC_BACKEND_URL,
-
     GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
     GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
     GOOGLE_REDIRECT_URI: process.env.GOOGLE_REDIRECT_URI,
-
     JWT_SECRET: process.env.JWT_SECRET,
-
     DATABASE_URL: process.env.DATABASE_URL,
+    OPENROUTER_API_KEY : process.env.OPENROUTER_API_KEY,
+    MODEL:process.env.MODEL
 } as const
 
 /**

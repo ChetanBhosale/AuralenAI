@@ -1,4 +1,5 @@
 import type { Request, Response } from 'express'
+import { serverResponse } from '../utils/response'
 import jwt from 'jsonwebtoken'
 import env from '@repo/secrets'
 import { prisma } from '@repo/db'
@@ -93,8 +94,17 @@ export const googleCallback = async (req: Request, res: Response) => {
  * Returns the authenticated user's profile.
  * Requires `authenticate` middleware to run before this.
  */
-export const getMe = (req: Request, res: Response) => {
+export const getMe = async(req: Request, res: Response) => {
     const { user } = req as AuthRequest
-    const response: AuthMeResponse = { user }
-    res.json(response)
+
+    const UserProducts = await prisma.product.findMany({
+        where : {
+            userId : user.id
+        },
+        select : {
+            targetAudience : true
+        }
+    })
+
+    serverResponse(res, 200, 'User fetched successfully', { user, products: UserProducts })
 }

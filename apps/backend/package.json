@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "@repo/db": "*",
+    "@repo/ai": "*",
     "@repo/secrets": "*",
     "@repo/types": "*",
     "@types/express": "^5.0.6",

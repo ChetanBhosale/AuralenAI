@@ -14,8 +14,6 @@ model User {
   google_id   String   @unique
   profile_pic String
 
-  onboarded   Boolean  @default(false)
-
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
