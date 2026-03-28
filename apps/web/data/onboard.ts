@@ -16,13 +16,13 @@ export function useCreateOnboarding() {
 
   return useMutation({
     mutationFn: (data: OnboardingInput) => onboard.create(data),
-    onSuccess: () => {
+    onSuccess: (res) => {
       localStorage.removeItem("onboard_step1");
       localStorage.removeItem("onboard_step2");
       localStorage.removeItem("onboard_step3");
 
       queryClient.invalidateQueries({ queryKey: ["user"] });
-      router.replace("/dashboard");
+      router.replace(`/dashboard?p=${res.data?.product?.id}`);
     },
     onError: (error: any) => {
       console.error("[Onboard] Error:", error?.response?.data?.message || error);

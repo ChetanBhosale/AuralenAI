@@ -102,6 +102,7 @@ export const getMe = async(req: Request, res: Response) => {
             userId : user.id
         },
         select : {
+            id : true,
             targetAudience : true
         }
     })

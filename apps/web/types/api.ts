@@ -27,6 +27,7 @@ export interface ITargetAudience {
 }
 
 export interface IUserProduct {
+  id: number;
   targetAudience: ITargetAudience | null;
 }
 

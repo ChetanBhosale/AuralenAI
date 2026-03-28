@@ -46,8 +46,8 @@ export function RootContextProvider({ children }: { children: ReactNode }) {
 
     if (!isLoading && data) {
       if (data.products.length > 0) {
-        if (pathname === "/") {
-          router.replace("/dashboard");
+        if (pathname === "/" || pathname === "/onboard") {
+          router.replace(`/dashboard?p=${data.products[0].id}`);
         }
       } else {
         if (pathname !== "/onboard") {

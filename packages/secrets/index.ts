@@ -16,10 +16,7 @@ const env = {
     MODEL:process.env.MODEL
 } as const
 
-/**
- * Validates that all required env vars are present.
- * Call this at server startup to fail fast.
- */
+
 export function validateEnv(requiredKeys: (keyof typeof env)[]) {
     const missing = requiredKeys.filter((key) => !env[key])
     if (missing.length > 0) {
