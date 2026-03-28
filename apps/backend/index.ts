@@ -14,6 +14,7 @@ validateEnv([
 import express from 'express'
 import cors from 'cors'
 import routes from './routes'
+import { errorHandler } from './middleware/error.middleware'
 
 const app = express()
 
@@ -24,6 +25,18 @@ app.use(cors({
 app.use(express.json())
 
 app.use('/api', routes)
+
+// Global error handler — must be after all routes
+app.use(errorHandler)
+
+// Catch unhandled rejections and uncaught exceptions so the process doesn't crash
+process.on('unhandledRejection', (reason) => {
+    console.error('[UnhandledRejection]', reason)
+})
+
+process.on('uncaughtException', (err) => {
+    console.error('[UncaughtException]', err)
+})
 
 app.listen(env.BACKEND_PORT, () => {
     console.log(`[Server] Running on port ${env.BACKEND_PORT}`)

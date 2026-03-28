@@ -2,8 +2,9 @@
 
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { agentIdentitySchema, type AgentIdentityInput } from "@repo/types";
+import { agentIdentitySchema, type AgentIdentityInput, type OnboardingInput } from "@repo/types";
 import { useQuery } from "@/hooks/use-query";
+import { useCreateOnboarding } from "@/data/onboard";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
@@ -33,6 +34,7 @@ const GOAL_OPTIONS = [
 
 export const AgentIdentity = () => {
   const { setQuery } = useQuery();
+  const { mutate: submitOnboarding, isPending } = useCreateOnboarding();
 
   const {
     register,
@@ -53,8 +55,16 @@ export const AgentIdentity = () => {
   };
 
   const onSubmit = (data: AgentIdentityInput) => {
-    localStorage.setItem("onboard_step3", JSON.stringify(data));
-    // TODO: combine all steps and submit to backend
+    const step1 = JSON.parse(localStorage.getItem("onboard_step1") || "{}");
+    const step2 = JSON.parse(localStorage.getItem("onboard_step2") || "{}");
+
+    const payload: OnboardingInput = {
+      ...step1,
+      ...step2,
+      ...data,
+    };
+
+    submitOnboarding(payload);
   };
 
   return (
@@ -162,8 +172,8 @@ export const AgentIdentity = () => {
               <Button type="button" variant="ghost" onClick={handleBack}>
                 Back
               </Button>
-              <Button type="submit" size="lg">
-                Launch Auralen
+              <Button type="submit" size="lg" disabled={isPending}>
+                {isPending ? "Launching..." : "Launch Auralen"}
                 <svg className="ml-1 h-3.5 w-3.5 transition-transform group-hover/button:translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M14 5l7 7m0 0l-7 7m7-7H3" />
                 </svg>
