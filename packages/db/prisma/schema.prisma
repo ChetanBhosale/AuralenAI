@@ -8,24 +8,25 @@ datasource db {
 }
 
 model User {
-  id          Int      @id @default(autoincrement())
-  email       String   @unique
+  id          Int     @id @default(autoincrement())
+  email       String  @unique
   name        String?
-  google_id   String   @unique
+  google_id   String  @unique
   profile_pic String
 
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   products Product[]
+  agents   Agent[]
 }
 
 model Product {
-  id              Int    @id @default(autoincrement())
-  name            String
-  product_details String
-  website_url     String
-  product_scrape_md      String
+  id                 Int    @id @default(autoincrement())
+  name               String
+  product_md         String
+  website_url        String
+  product_scrape_md  String
   prduct_description String
 
   userId Int
@@ -36,8 +37,8 @@ model Product {
 
   targetAudience TargetAudience?
   crawlers       Crawler[]
+  agentProducts  AgentProduct[]
 }
-
 
 model TargetAudience {
   id         Int           @id @default(autoincrement())
@@ -51,6 +52,42 @@ model TargetAudience {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Agent {
+  id           Int     @id @default(autoincrement())
+  speech       SPEECH  @default(FORMAL)
+  agent_md     String // this is something will generate afterwords
+  tone_context String?
+  goal         OUTREACH_GOAL @default(BOOK_MEETING)
+
+  userId Int
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  agentProducts AgentProduct[]
+}
+
+model AgentProduct {
+  id Int @id @default(autoincrement())
+
+  agentId   Int
+  agent     Agent   @relation(fields: [agentId], references: [id], onDelete: Cascade)
+
+  productId Int
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@unique([agentId, productId])
+}
+
+enum SPEECH {
+  CASUAL
+  FORMAL
+  FRIENDLY
 }
 
 enum OUTREACH_GOAL {
