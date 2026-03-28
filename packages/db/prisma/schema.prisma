@@ -1,8 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Get a free hosted Postgres database in seconds: `npx create-db`
-
 generator client {
   provider = "prisma-client"
   output   = "../generated/prisma"
@@ -13,11 +8,82 @@ datasource db {
 }
 
 model User {
-  id              Int      @id @default(autoincrement())
-  email           String   @unique
-  name            String?
-  google_id       String   @unique
-  profile_pic     String?
-  created_at      DateTime @default(now())
-  updated_at      DateTime @updatedAt
+  id          Int      @id @default(autoincrement())
+  email       String   @unique
+  name        String?
+  google_id   String   @unique
+  profile_pic String
+
+  onboarded   Boolean  @default(false)
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  products Product[]
+}
+
+model Product {
+  id              Int    @id @default(autoincrement())
+  name            String
+  product_details String
+  website_url     String
+  product_scrape_md      String
+  prduct_description String
+
+  userId Int
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  targetAudience TargetAudience?
+  crawlers       Crawler[]
+}
+
+
+model TargetAudience {
+  id         Int           @id @default(autoincrement())
+  job_roles  String[]
+  industries String[]
+  locations  String[]
+  goal       OUTREACH_GOAL @default(BOOK_MEETING)
+
+  productId Int     @unique
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum OUTREACH_GOAL {
+  SALES
+  NETWORKING
+  PARTNERSHIPS
+  BRAND_BUILDING
+  BOOK_MEETING
+}
+
+model Crawler {
+  id         Int            @id @default(autoincrement())
+  model      CRAWLER_MODEL
+  status     CRAWLER_STATUS @default(PENDING)
+  sync_start DateTime?
+  sync_end   DateTime?
+
+  productId Int
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum CRAWLER_MODEL {
+  PRODUCT
+}
+
+enum CRAWLER_STATUS {
+  PENDING
+  RUNNING
+  COMPLETED
+  FAILED
 }
