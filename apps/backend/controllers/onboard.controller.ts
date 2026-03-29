@@ -3,6 +3,7 @@ import { onboardingSchema } from '@repo/types'
 import { prisma } from '@repo/db'
 import { serverResponse } from '../utils/response'
 import type { AuthRequest } from '../middleware/auth.middleware'
+import { getTemporalClient, QUEUES } from '@repo/temporal'
 
 export const createOnboarding = async (req: Request, res: Response) => {
     try {
@@ -64,7 +65,20 @@ export const createOnboarding = async (req: Request, res: Response) => {
             return { product, agent }
         })
 
-        // build the temporal website scraper here that will actually scrape the website and create a full details about the product
+        // Trigger Temporal workflow to scrape website and generate agent_md
+        const temporalClient = await getTemporalClient()
+        await temporalClient.workflow.start('onboardWorkflow', {
+            taskQueue: QUEUES.ONBOARD,
+            workflowId: `onboard-${result.product.id}-${result.agent.id}`,
+            args: [{
+                productId: result.product.id,
+                agentId: result.agent.id,
+                websiteUrl: website_url,
+                speech: speech,
+                goal: goal,
+                toneContext: tone_context ?? null,
+            }],
+        })
 
         serverResponse(res, 201, 'Onboarding completed', result)
     } catch (error) {

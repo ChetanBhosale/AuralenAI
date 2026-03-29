@@ -36,7 +36,7 @@ model Product {
   updatedAt DateTime @updatedAt
 
   targetAudience TargetAudience?
-  crawlers       Crawler[]
+  workflowRuns   WorkflowRun[]
   agentProducts  AgentProduct[]
 
   @@index([userId])
@@ -105,12 +105,16 @@ enum OUTREACH_GOAL {
   BOOK_MEETING
 }
 
-model Crawler {
-  id         Int            @id @default(autoincrement())
-  model      CRAWLER_MODEL
-  status     CRAWLER_STATUS @default(PENDING)
-  sync_start DateTime?
-  sync_end   DateTime?
+model WorkflowRun {
+  id           Int              @id @default(autoincrement())
+  workflow     WORKFLOW_TYPE
+  activity     WORKFLOW_ACTIVITY
+  status       WORKFLOW_STATUS  @default(PENDING)
+  workflow_id  String?          // Temporal workflow ID
+  retry_count  Int              @default(0)
+  error        String?          // last error message on failure
+  sync_start   DateTime?
+  sync_end     DateTime?
 
   productId Int
   product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
@@ -120,13 +124,19 @@ model Crawler {
 
   @@index([productId])
   @@index([status])
+  @@index([workflow])
 }
 
-enum CRAWLER_MODEL {
-  PRODUCT
+enum WORKFLOW_TYPE {
+  ONBOARD
 }
 
-enum CRAWLER_STATUS {
+enum WORKFLOW_ACTIVITY {
+  PRODUCT_SCRAPE
+  AGENT_GENERATE
+}
+
+enum WORKFLOW_STATUS {
   PENDING
   RUNNING
   COMPLETED

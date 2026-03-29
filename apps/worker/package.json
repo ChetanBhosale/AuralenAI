@@ -1,5 +1,5 @@
 {
-  "name": "@repo/backend",
+  "name": "@repo/worker",
   "module": "index.ts",
   "type": "module",
   "private": true,
@@ -8,22 +8,18 @@
     "start": "bun index.ts"
   },
   "devDependencies": {
-    "@types/bun": "latest",
-    "@types/cors": "^2.8.19"
+    "@types/bun": "latest"
   },
   "peerDependencies": {
     "typescript": "^5"
   },
   "dependencies": {
-    "@repo/db": "*",
     "@repo/ai": "*",
+    "@repo/db": "*",
     "@repo/secrets": "*",
-    "@repo/types": "*",
     "@repo/temporal": "*",
-    "@types/express": "^5.0.6",
-    "@types/jsonwebtoken": "^9.0.10",
-    "cors": "^2.8.6",
-    "express": "^5.2.1",
-    "jsonwebtoken": "^9.0.3"
+    "@temporalio/activity": "^1.11.8",
+    "@temporalio/worker": "^1.11.8",
+    "@temporalio/workflow": "^1.11.8"
   }
 }

@@ -13,7 +13,10 @@ const env = {
     JWT_SECRET: process.env.JWT_SECRET,
     DATABASE_URL: process.env.DATABASE_URL,
     OPENROUTER_API_KEY : process.env.OPENROUTER_API_KEY,
-    MODEL:process.env.MODEL
+    MODEL:process.env.MODEL,
+    TEMPORAL_ADDRESS: process.env.TEMPORAL_ADDRESS ?? 'localhost:7233',
+    TEMPORAL_NAMESPACE: process.env.TEMPORAL_NAMESPACE ?? 'default',
+    TEMPORAL_ONBOARD_QUEUE: process.env.TEMPORAL_ONBOARD_QUEUE ?? 'onboard-queue',
 } as const
 
 

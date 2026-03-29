@@ -1,0 +1,24 @@
+{
+  "name": "@repo/temporal",
+  "module": "index.ts",
+  "type": "module",
+  "exports": {
+    ".": "./index.ts",
+    "./client": "./client.ts",
+    "./workflows": "./workflows/index.ts",
+    "./activities": "./activities/index.ts",
+    "./queues": "./queues.ts"
+  },
+  "private": true,
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "dependencies": {
+    "@repo/secrets": "*",
+    "@temporalio/client": "^1.11.8",
+    "@temporalio/common": "^1.11.8"
+  }
+}

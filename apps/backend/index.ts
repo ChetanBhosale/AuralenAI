@@ -15,6 +15,7 @@ import express from 'express'
 import cors from 'cors'
 import routes from './routes'
 import { errorHandler } from './middleware/error.middleware'
+import { prisma } from '@repo/db'
 
 const app = express()
 
@@ -38,6 +39,13 @@ process.on('uncaughtException', (err) => {
     console.error('[UncaughtException]', err)
 })
 
-app.listen(env.BACKEND_PORT, () => {
+app.listen(env.BACKEND_PORT, async () => {
     console.log(`[Server] Running on port ${env.BACKEND_PORT}`)
+
+    try {
+        await prisma.$queryRaw`SELECT 1`
+        console.log('[Database] Connection successful')
+    } catch (err) {
+        console.error('[Database] Connection failed:', err)
+    }
 })
